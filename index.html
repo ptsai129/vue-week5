@@ -1,16 +1,22 @@
 <!DOCTYPE html>
 <html lang="zh-Hant-TW">
-
   <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
-    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.9.0/css/all.min.css'
-          integrity='sha512-q3eWabyZPc1XTCmF+8/LuE1ozpg5xxn7iO89yfSOd5/oKvyqLngoNGsx8jq92Y8eXJ/IRxQbEC+FGSYxtk2oiw=='
-          crossorigin='anonymous' />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.9.0/css/all.min.css"
+      integrity="sha512-q3eWabyZPc1XTCmF+8/LuE1ozpg5xxn7iO89yfSOd5/oKvyqLngoNGsx8jq92Y8eXJ/IRxQbEC+FGSYxtk2oiw=="
+      crossorigin="anonymous"
+    />
   </head>
 
   <body>
@@ -18,9 +24,8 @@
       <div class="container">
         <div class="mt-4">
           <!-- 產品Modal -->
-          
-          <!-- 產品Modal -->
-         
+          <product-modal ref="productModal"></product-modal>
+
           <table class="table align-middle">
             <thead>
               <tr>
@@ -33,22 +38,28 @@
             <tbody>
               <tr v-for="product in products" :key="product.id">
                 <td style="width: 200px">
-                  <div :style="{ backgroundImage:`url(${product.imageUrl})`}"
-                  style="height: 100px; background-size: cover; background-position: center"></div>
+                  <div
+                    :style="{ backgroundImage:`url(${product.imageUrl})`}"
+                    style="
+                      height: 100px;
+                      background-size: cover;
+                      background-position: center;
+                    "
+                  ></div>
                 </td>
+                <td>{{ product.title }}</td>
                 <td>
-                  {{ product.title }}
-                </td>
-                <td>
-                  <div class="h5" v-if="product.price === product.origin_price">{{ product.price }} 元</div>
+                  <div class="h5" v-if="product.price === product.origin_price">
+                    {{ product.price }} 元
+                  </div>
                   <div v-else>
-                  <del class="h6">原價 {{ product.origin_price }} 元</del>
-                  <div class="h5">現在只要 {{ product.price }} 元</div>
+                    <del class="h6">原價 {{ product.origin_price }} 元</del>
+                    <div class="h5">現在只要 {{ product.price }} 元</div>
                   </div>
                 </td>
                 <td>
                   <div class="btn-group btn-group-sm">
-                    <button type="button" class="btn btn-outline-secondary">
+                    <button type="button" class="btn btn-outline-secondary" @click="openProductModal">
                       <i class="fas fa-spinner fa-pulse"></i>
                       查看更多
                     </button>
@@ -63,7 +74,9 @@
           </table>
           <!-- 購物車列表 -->
           <div class="text-end">
-            <button class="btn btn-outline-danger" type="button">清空購物車</button>
+            <button class="btn btn-outline-danger" type="button">
+              清空購物車
+            </button>
           </div>
           <table class="table align-middle">
             <thead>
@@ -84,23 +97,22 @@
                     </button>
                   </td>
                   <td>
-                    {{  }}
-                    <div class="text-success">
-                      已套用優惠券
-                    </div>
+                    {{ }}
+                    <div class="text-success">已套用優惠券</div>
                   </td>
                   <td>
                     <div class="input-group input-group-sm">
                       <div class="input-group mb-3">
-                        <input 
-                             min="1" type="number" class="form-control">
-                        <span class="input-group-text" id="basic-addon2">{{  }}</span>
+                        <input min="1" type="number" class="form-control" />
+                        <span class="input-group-text" id="basic-addon2"
+                          >{{ }}</span
+                        >
                       </div>
                     </div>
                   </td>
                   <td class="text-end">
                     <small class="text-success">折扣價：</small>
-                    {{  }}
+                    {{ }}
                   </td>
                 </tr>
               </template>
@@ -108,11 +120,11 @@
             <tfoot>
               <tr>
                 <td colspan="3" class="text-end">總計</td>
-                <td class="text-end">{{  }}</td>
+                <td class="text-end">{{ }}</td>
               </tr>
               <tr>
                 <td colspan="3" class="text-end text-success">折扣價</td>
-                <td class="text-end text-success">{{  }}</td>
+                <td class="text-end text-success">{{ }}</td>
               </tr>
             </tfoot>
           </table>
@@ -161,59 +173,64 @@
       </div>
     </div>
     <script type="text/x-template" id="userProductModal">
-<div class="modal fade" id="productModal" tabindex="-1" role="dialog"
-     aria-labelledby="exampleModalLabel" aria-hidden="true" ref="modal">
-  <div class="modal-dialog modal-xl" role="document">
-    <div class="modal-content border-0">
-      <div class="modal-header bg-dark text-white">
-        <h5 class="modal-title" id="exampleModalLabel">
-          <span>{{  }}</span>
-      </h5>
-        <button type="button" class="btn-close"
-                data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <div class="row">
-          <div class="col-sm-6">
-            <img class="img-fluid" :src="..." alt="">
-      </div>
-          <div class="col-sm-6">
-            <span class="badge bg-primary rounded-pill">{{  }}</span>
-            <p>商品描述：{{  }}</p>
-            <p>商品內容：{{  }}</p>
-            <div class="h5">{{  }} 元</div>
-            <del class="h6">原價 {{ }} 元</del>
-            <div class="h5">現在只要 {{  }} 元</div>
-            <div>
-              <div class="input-group">
-                <input type="number" class="form-control"
-                       min="1">
-                <button type="button" class="btn btn-primary">加入購物車</button>
-      </div>
-      </div>
-      </div>
-          <!-- col-sm-6 end -->
-      </div>
-      </div>
-      </div>
-      </div>
-      </div>
+      <div class="modal fade" id="productModal" tabindex="-1" role="dialog"
+           aria-labelledby="exampleModalLabel" aria-hidden="true" ref="modal">
+        <div class="modal-dialog modal-xl" role="document">
+          <div class="modal-content border-0">
+            <div class="modal-header bg-dark text-white">
+              <h5 class="modal-title" id="exampleModalLabel">
+                <span>{{  }}</span>
+            </h5>
+              <button type="button" class="btn-close"
+                      data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <div class="row">
+                <div class="col-sm-6">
+                  <img class="img-fluid" :src="" alt="">
+            </div>
+                <div class="col-sm-6">
+                  <span class="badge bg-primary rounded-pill">{{  }}</span>
+                  <p>商品描述：{{  }}</p>
+                  <p>商品內容：{{  }}</p>
+                  <div class="h5">{{  }} 元</div>
+                  <del class="h6">原價 {{ }} 元</del>
+                  <div class="h5">現在只要 {{  }} 元</div>
+                  <div>
+                    <div class="input-group">
+                      <input type="number" class="form-control"
+                             min="1">
+                      <button type="button" class="btn btn-primary">加入購物車</button>
+            </div>
+            </div>
+            </div>
+                <!-- col-sm-6 end -->
+            </div>
+            </div>
+            </div>
+            </div>
+            </div>
     </script>
 
-    <script src='https://cdnjs.cloudflare.com/ajax/libs/axios/0.9.1/axios.min.js'
-            integrity='sha512-Xk3wWei2TGrsh9kDSBKUMIjw/86sLUvhtnv9f7fOuIwhhiUTKz8szkWkzHthrM5Bb3Bu9idSzkxOrkzhcneuiw=='
-            crossorigin='anonymous'></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"
-            integrity="sha384-SR1sx49pcuLnqZUnnPwx6FCym0wLsk5JZuNx2bPPENzswTNFaQU1RDvt3wT4gWFG"
-            crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.min.js"
-            integrity="sha384-j0CNLUeiqtyaRmlzUHCPZ+Gy5fQu0dQ6eZ/xAww941Ai1SxSY+0EQqNXNE6DZiVc"
-            crossorigin="anonymous"></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.9.1/axios.min.js"
+      integrity="sha512-Xk3wWei2TGrsh9kDSBKUMIjw/86sLUvhtnv9f7fOuIwhhiUTKz8szkWkzHthrM5Bb3Bu9idSzkxOrkzhcneuiw=="
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"
+      integrity="sha384-SR1sx49pcuLnqZUnnPwx6FCym0wLsk5JZuNx2bPPENzswTNFaQU1RDvt3wT4gWFG"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.min.js"
+      integrity="sha384-j0CNLUeiqtyaRmlzUHCPZ+Gy5fQu0dQ6eZ/xAww941Ai1SxSY+0EQqNXNE6DZiVc"
+      crossorigin="anonymous"
+    ></script>
     <!-- <script src="https://unpkg.com/vue@next"></script>
     <script src="https://unpkg.com/vee-validate@next"></script>
     <script src="https://unpkg.com/@vee-validate/i18n@4.1.0"></script>
     <script src="https://unpkg.com/@vee-validate/rules"></script> -->
     <script src="./javascript/app.js" type="module"></script>
   </body>
-
 </html>
