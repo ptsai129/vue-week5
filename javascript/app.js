@@ -9,6 +9,7 @@ const app = createApp({
         return{
             cartData:{},
             products:[],
+            productId:'',
 
 
         }
@@ -23,10 +24,14 @@ const app = createApp({
                 alert(err.data.message);
             })
         },
-        //開啟modal
-        openProductModal(){
+        //開啟modal 取得單一產品細節
+        openProductModal(id){
+            //把傳入的id放到productId內
+            this.productId = id; 
             this.$refs.productModal.openModal();
         }
+
+
 
         
     },
@@ -40,17 +45,38 @@ const app = createApp({
 app.component('product-modal',{
     data(){
         return{
-           modal:{}
+           modal:{},
+           product:{},
 
         }
+    },
+    template: '#userProductModal',
+    //props id接收外層傳入內層的值
+    props:['id'],
+    watch:{
+    //監聽id的值是否有變動 若有變動就觸發取得單一產品內容
+    id(){
+        this.getProdcutDetails();
+    }
+
     },
     methods:{
         //開啟modal
         openModal(){
          this.modal.show();
+        },
+        //取得單一產品細節
+        getProdcutDetails(){
+                                                        //props的id
+            axios.get(`${apiUrl}/api/${apiPath}/product/${this.id}`).then((res)=>{
+                console.log(res.data);
+                this.product = res.data.product;
+            }).catch((err)=>{
+                alert(err.data.message);
+            })
+
         }
     },
-    template: '#userProductModal',
     mounted(){
         //實體化moddl運用ref抓到dom 並儲存到modal物件內
         this.modal = new bootstrap.Modal(this.$refs.modal);
