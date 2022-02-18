@@ -29,6 +29,31 @@ const app = createApp({
             //把傳入的id放到productId內
             this.productId = id; 
             this.$refs.productModal.openModal();
+        },
+        getCarts(){
+            axios.get(`${apiUrl}/api/${apiPath}/cart`).then((res)=>{
+                this.cartData = res.data.data;
+          
+            }).catch((err)=>{
+                alert(err.data.message);
+            })
+        },
+                      //沒有傳入值時 qty預設為1
+        addToCart(id , qty=1){
+            //定義要帶入api的資訊
+            let data = {
+                product_id: id, 
+                qty:1
+            }
+            axios.post(`${apiUrl}/api/${apiPath}/cart`,{data}).then((res)=>{
+                console.log(res);
+                //顯示已加入購物車提示訊息
+                alert(res.data.message);
+                //再重新取得購物車內內容
+                this.getCarts();
+            }).catch((err)=>{
+                alert(err.data.message);
+            })
         }
 
 
@@ -36,8 +61,11 @@ const app = createApp({
         
     },
     mounted(){
-        //執行取得產品列表
+        //初始化執行取得產品列表
         this.getProductList();
+        //初始化取得購物車列表
+        this.getCarts();
+
 
     }
 })
