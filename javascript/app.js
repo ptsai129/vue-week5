@@ -39,7 +39,7 @@ const app = createApp({
             //定義要帶入api的資訊
             let data = {
                 product_id: id, 
-                qty:1
+                qty
             }
             //加入購物車的品項id的值賦予到isLoadingItem變數上 用來做後續判斷
             this.isLoadingItem = id; 
@@ -117,7 +117,9 @@ app.component('product-modal',{
         },
         //取得單一產品細節
         getProdcutDetails(){
-                                                        //props的id
+            //觸發 getProdcutDetails 的時， qty 要變成初始值
+            this.qty=1;                                                     
+                                                       //props的id
             axios.get(`${apiUrl}/api/${apiPath}/product/${this.id}`).then((res)=>{
                 this.product = res.data.product;
             })
