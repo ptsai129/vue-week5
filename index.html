@@ -85,7 +85,6 @@
             </button>
           </div>
           <div>
-            {{cartData}}
           </div>
           <table class="table align-middle">
             <thead>
@@ -97,44 +96,45 @@
               </tr>
             </thead>
             <tbody>
+              <!-- 如果購物車內有資料才執行 -->
               <template v-if="cartData.carts">
-                <tr>
+                <!-- 逐筆帶出資料 -->
+                <tr v-for="item in cartData.carts" :key="item.id">
                   <td>
-                    <button type="button" class="btn btn-outline-danger btn-sm">
-                      <i class="fas fa-spinner fa-pulse"></i>
+                    <button type="button" class="btn btn-outline-danger btn-sm" @click="deleteCartItem(item.id)">
                       x
                     </button>
                   </td>
                   <td>
-                    {{ }}
-                    <div class="text-success">已套用優惠券</div>
+                    {{ item.product.title }}
+                    <!-- <div class="text-success">已套用優惠券</div> -->
                   </td>
                   <td>
                     <div class="input-group input-group-sm">
                       <div class="input-group mb-3">
-                        <input min="1" type="number" class="form-control" />
+                        <input min="1" type="number" class="form-control" v-model="item.qty" />
                         <span class="input-group-text" id="basic-addon2"
-                          >{{ }}</span
+                          >{{ item.product.unit }}</span
                         >
                       </div>
                     </div>
                   </td>
-                  <td class="text-end">
-                    <small class="text-success">折扣價：</small>
-                    {{ }}
-                  </td>
+                  <td class="text-center">
+                    <!-- <small class="text-success">折扣價：</small> -->
+                    {{ item.product.price }}
+                  </td> 
                 </tr>
               </template>
             </tbody>
             <tfoot>
               <tr>
                 <td colspan="3" class="text-end">總計</td>
-                <td class="text-end">{{ }}</td>
+                <td class="text-end">{{ cartData.total}}</td>
               </tr>
-              <tr>
+              <!-- <tr>
                 <td colspan="3" class="text-end text-success">折扣價</td>
                 <td class="text-end text-success">{{ }}</td>
-              </tr>
+              </tr> -->
             </tfoot>
           </table>
         </div>

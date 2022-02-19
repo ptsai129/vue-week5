@@ -21,8 +21,6 @@ const app = createApp({
             axios.get(`${apiUrl}/api/${apiPath}/products/all`).then((res)=>{
                 //把api取得的商品賦予到data內的products陣列
                 this.products = res.data.products;
-            }).catch((err)=>{
-                alert(err.data.message);
             })
         },
         //開啟modal 取得單一產品細節
@@ -34,9 +32,6 @@ const app = createApp({
         getCarts(){
             axios.get(`${apiUrl}/api/${apiPath}/cart`).then((res)=>{
                 this.cartData = res.data.data;
-          
-            }).catch((err)=>{
-                alert(err.data.message);
             })
         },
                       //沒有傳入值時 qty預設為1
@@ -55,9 +50,15 @@ const app = createApp({
                 this.getCarts();
                 //完成購物車內容渲染後 將isLoadingItem狀態改為預設
                 this.isLoadingItem = "";           
-            }).catch((err)=>{
-                alert(err.data.message);
             })
+        },
+        //刪除購物車內品項
+        deleteCartItem(id){
+            axios.delete(`${apiUrl}/api/${apiPath}/cart/${id}`).then((res)=>{
+                this.getCarts();
+                alert(res.data.message);
+            })
+
         }
 
 
