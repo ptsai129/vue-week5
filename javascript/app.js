@@ -10,6 +10,7 @@ const app = createApp({
             cartData:{},
             products:[],
             productId:'',
+            isLoadingItem:'',
 
 
         }
@@ -45,12 +46,15 @@ const app = createApp({
                 product_id: id, 
                 qty:1
             }
+            //加入購物車的品項id的值賦予到isLoadingItem變數上 用來做後續判斷
+            this.isLoadingItem = id; 
             axios.post(`${apiUrl}/api/${apiPath}/cart`,{data}).then((res)=>{
-                console.log(res);
                 //顯示已加入購物車提示訊息
                 alert(res.data.message);
                 //再重新取得購物車內內容
                 this.getCarts();
+                //完成購物車內容渲染後 將isLoadingItem狀態改為預設
+                this.isLoadingItem = "";           
             }).catch((err)=>{
                 alert(err.data.message);
             })

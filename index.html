@@ -61,11 +61,16 @@
                 <td>
                   <div class="btn-group btn-group-sm">
                     <button type="button" class="btn btn-outline-secondary" @click="openProductModal(product.id)">
-                      <i class="fas fa-spinner fa-pulse"></i>
                       查看更多
                     </button>
-                    <button type="button" class="btn btn-outline-danger" @click="addToCart(product.id)">
-                      <i class="fas fa-spinner fa-pulse"></i>
+                    <!-- isLoadingItem內的值跟id一樣 按鈕會被disabled -->
+                    <button type="button" class="btn btn-outline-danger" 
+                    @click="addToCart(product.id)" 
+                    :disabled="isLoadingItem === product.id">
+                    <!-- isLoadingItem內的值跟id一樣 會顯示loading圖示 -->
+                    <span class="spinner-border spinner-border-sm text-light" 
+                    role="status" v-show="isLoadingItem === product.id">                 
+                    </span>
                       加到購物車
                     </button>
                   </div>
