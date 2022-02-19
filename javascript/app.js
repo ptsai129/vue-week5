@@ -11,8 +11,6 @@ const app = createApp({
             products:[],
             productId:'',
             isLoadingItem:'',
-
-
         }
     },
     methods:{
@@ -29,11 +27,13 @@ const app = createApp({
             this.productId = id; 
             this.$refs.productModal.openModal();
         },
+        //取得購物車
         getCarts(){
             axios.get(`${apiUrl}/api/${apiPath}/cart`).then((res)=>{
                 this.cartData = res.data.data;
             })
         },
+        //新增品項到購物車
                       //沒有傳入值時 qty預設為1
         addToCart(id , qty=1){
             //定義要帶入api的資訊
@@ -44,12 +44,12 @@ const app = createApp({
             //加入購物車的品項id的值賦予到isLoadingItem變數上 用來做後續判斷
             this.isLoadingItem = id; 
             axios.post(`${apiUrl}/api/${apiPath}/cart`,{data}).then((res)=>{
-                //顯示已加入購物車提示訊息
-                alert(res.data.message);
                 //再重新取得購物車內內容
                 this.getCarts();
                 //完成購物車內容渲染後 將isLoadingItem狀態改為預設
-                this.isLoadingItem = "";           
+                this.isLoadingItem = "";
+                 //顯示已加入購物車提示訊息
+                 alert(res.data.message);          
             })
         },
         //刪除購物車內品項
@@ -58,20 +58,31 @@ const app = createApp({
                 this.getCarts();
                 alert(res.data.message);
             })
-
-        }
-
-
-
-        
+        },
+        //更新購物車 帶入完整品項資料
+        updateCart(item){
+            //定義要帶入api的資訊
+            let data = {
+                product_id: item.id, 
+                qty:item.qty
+            }
+            //加入購物車的品項id的值賦予到isLoadingItem變數上 用來做後續判斷
+            this.isLoadingItem = item.id; 
+            axios.put(`${apiUrl}/api/${apiPath}/cart/${item.id}`,{data}).then((res)=>{
+                //顯示更新購物車提示訊息
+                alert(res.data.message);
+                //再重新取得購物車內內容
+                this.getCarts();
+                //完成購物車內容渲染後 將isLoadingItem狀態改為預設
+                this.isLoadingItem = "";           
+            })
+        }    
     },
     mounted(){
         //初始化執行取得產品列表
         this.getProductList();
         //初始化取得購物車列表
         this.getCarts();
-
-
     }
 })
 //註冊全域變數 product modal
@@ -80,6 +91,8 @@ app.component('product-modal',{
         return{
            modal:{},
            product:{},
+           //數量預設一個
+           qty:1
 
         }
     },
@@ -98,16 +111,24 @@ app.component('product-modal',{
         openModal(){
          this.modal.show();
         },
+        //關閉modal
+        hideModal(){
+            this.modal.hide();
+        },
         //取得單一產品細節
         getProdcutDetails(){
                                                         //props的id
             axios.get(`${apiUrl}/api/${apiPath}/product/${this.id}`).then((res)=>{
-                console.log(res.data);
                 this.product = res.data.product;
-            }).catch((err)=>{
-                alert(err.data.message);
             })
-
+        },
+        modalAddtoCart(){
+            //看有沒有取得數量
+            console.log(this.qty);
+            //定義emit名稱是modal-addcart 並帶入id 跟qty
+           this.$emit('modal-addcart', this.product.id, this.qty);
+           this.hideModal();
+            
         }
     },
     mounted(){
