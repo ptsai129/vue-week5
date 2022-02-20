@@ -3,14 +3,41 @@ import { createApp } from 'https://cdnjs.cloudflare.com/ajax/libs/vue/3.2.29/vue
 //定義axios串接api會取到的變數
 const apiUrl = 'https://vue3-course-api.hexschool.io/v2';
 const apiPath = 'ptsai129';
+
+//表單驗證規則
+Object.keys(VeeValidateRules).forEach(rule => {
+    if (rule !== 'default') {
+      VeeValidate.defineRule(rule, VeeValidateRules[rule]);
+    }
+  });
+
+//多國語系
+VeeValidateI18n.loadLocaleFromURL('./zh_TW.json');
+
+// Activate the locale
+VeeValidate.configure({
+  generateMessage: VeeValidateI18n.localize('zh_TW'),
+  validateOnInput: true, // 調整為輸入字元立即進行驗證
+});
+//加入特定規則
+VeeValidate.defineRule('email', VeeValidateRules['email']);
+VeeValidate.defineRule('required', VeeValidateRules['required']);
+
 //ESModule載入方式的vue起手式
-const app = createApp({
+const app =createApp({
     data(){
         return{
             cartData:{},
             products:[],
             productId:'',
             isLoadingItem:'',
+            user:{
+            name:'',
+            email:'',
+            tel:'',
+            addr:'',
+            msg:''
+            }
         }
     },
     methods:{
@@ -76,7 +103,16 @@ const app = createApp({
                 //完成購物車內容渲染後 將isLoadingItem狀態改為預設
                 this.isLoadingItem = "";           
             })
-        }    
+        },
+        //驗證電話號碼
+        isPhone (value) {
+            const phoneNumber = /^(09)[0-9]{8}$/
+            return phoneNumber.test(value) ? true : '需要正確的電話號碼'
+          },
+        //送出表單
+        onSubmit() {
+        
+          }
     },
     mounted(){
         //初始化執行取得產品列表
@@ -137,9 +173,13 @@ app.component('product-modal',{
         //實體化moddl運用ref抓到dom 並儲存到modal物件內
         this.modal = new bootstrap.Modal(this.$refs.modal);
        
-    },
+    }
 })
-
+//表單驗證元件
+app.component('VForm', VeeValidate.Form);
+app.component('VField', VeeValidate.Field);
+app.component('ErrorMessage', VeeValidate.ErrorMessage);
 
 //掛載
 app.mount("#app");
+
