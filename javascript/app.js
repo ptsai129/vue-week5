@@ -18,7 +18,7 @@ VeeValidate.configure({
   validateOnInput: true, // 調整為輸入字元立即進行驗證
 });
 
-//ESModule載入方式的vue起手式
+//CDN載入方式的vue起手式
 const app = Vue.createApp({
     data(){
         return{
@@ -26,15 +26,18 @@ const app = Vue.createApp({
             products:[],
             productId:'',
             isLoadingItem:'',
-            user:{
-            name:'',
-            email:'',
-            tel:'',
-            addr:'',
-            msg:''
-            }
-        }
-    },
+            form: {
+                user: {
+                  name: '',
+                  email: '',
+                  tel: '',
+                  address:''
+                },
+                message: ''
+              },
+             
+            };
+          },
     methods:{
         //取得產品列表
         getProductList(){
@@ -113,8 +116,18 @@ const app = Vue.createApp({
           },
         //送出表單
         onSubmit() {
-        
-          }
+            const order = this.form;
+            axios.post(`${apiUrl}/api/${apiPath}/order`, { data: order })
+              .then((res) => {
+                  alert(res.data.message);
+                  this.$refs.form.resetForm();
+                  this.form.message = '';
+                  this.getCarts();
+              })
+              .catch((error) => {
+                alert(error.message);
+              });
+          }   
     },
     mounted(){
         //初始化執行取得產品列表
@@ -176,7 +189,7 @@ app.component('product-modal',{
         this.modal = new bootstrap.Modal(this.$refs.modal);
        
     }
-})
+});
 //表單驗證元件
 app.component('VForm', VeeValidate.Form);
 app.component('VField', VeeValidate.Field);
