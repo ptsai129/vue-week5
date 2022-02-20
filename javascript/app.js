@@ -1,5 +1,3 @@
-//ESModule載入vue
-import { createApp } from 'https://cdnjs.cloudflare.com/ajax/libs/vue/3.2.29/vue.esm-browser.min.js';
 //定義axios串接api會取到的變數
 const apiUrl = 'https://vue3-course-api.hexschool.io/v2';
 const apiPath = 'ptsai129';
@@ -19,12 +17,9 @@ VeeValidate.configure({
   generateMessage: VeeValidateI18n.localize('zh_TW'),
   validateOnInput: true, // 調整為輸入字元立即進行驗證
 });
-//加入特定規則
-VeeValidate.defineRule('email', VeeValidateRules['email']);
-VeeValidate.defineRule('required', VeeValidateRules['required']);
 
 //ESModule載入方式的vue起手式
-const app =createApp({
+const app = Vue.createApp({
     data(){
         return{
             cartData:{},
@@ -79,9 +74,16 @@ const app =createApp({
                  alert(res.data.message);          
             })
         },
-        //刪除購物車內品項
+        //刪除購物車內單一品項
         deleteCartItem(id){
             axios.delete(`${apiUrl}/api/${apiPath}/cart/${id}`).then((res)=>{
+                this.getCarts();
+                alert(res.data.message);
+            })
+        },
+        //刪除全部購物車
+        deleteAll(){
+            axios.delete(`${apiUrl}/api/${apiPath}/carts`).then((res)=>{
                 this.getCarts();
                 alert(res.data.message);
             })
